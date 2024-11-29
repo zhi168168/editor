@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小红书文案编辑器</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>小红书文案编辑器</h1>
+            <button id="downloadLogsBtn" class="icon-btn" title="下载日志">
+                <svg viewBox="0 0 24 24" width="16" height="16">
+                    <path fill="currentColor" d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                </svg>
+            </button>
+        </header>
+        
+        <div class="title-input-area">
+            <textarea id="titleInput" placeholder="请输入标题，每行一个标题"></textarea>
+            <button id="importTitlesBtn">导入标题</button>
+        </div>
+        
+        <div class="article-input-area">
+            <textarea id="articleInput" placeholder="请输入多篇文案内容，使用'zzz'分隔每篇文案"></textarea>
+            <button id="generateBtn">导入文案</button>
+        </div>
+        
+        <div class="topic-input-area">
+            <textarea id="topicInput" placeholder="请输入话题关键词，每行一个，例如：外企打工人"></textarea>
+            <button id="applyTopicsBtn">导入话题</button>
+        </div>
+        
+        <div class="main-content">
+            <div class="article-list">
+                <div class="list-header">
+                    <div class="list-title">
+                        <h2>文案列表</h2>
+                        <div class="list-info">
+                            <span id="totalCount" class="total-count"></span>
+                            <span id="emptyCount" class="empty-count"></span>
+                        </div>
+                    </div>
+                    <div class="list-controls">
+                        <button id="restoreBtn" class="icon-btn" title="恢复文案" style="display: none;">
+                            <svg viewBox="0 0 24 24" width="16" height="16">
+                                <path fill="currentColor" d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/>
+                            </svg>
+                        </button>
+                        <button id="clearBtn" class="icon-btn" title="清空列表">
+                            <svg viewBox="0 0 24 24" width="16" height="16">
+                                <path fill="currentColor" d="M19 13H5v-2h14v2z"/>
+                            </svg>
+                        </button>
+                        <button id="createBtn" class="icon-btn" title="创建文案">
+                            <svg viewBox="0 0 24 24" width="16" height="16">
+                                <path fill="currentColor" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="articleContainer"></div>
+            </div>
+            
+            <div class="editor-area" style="display: none;">
+                <div class="title-editor-wrapper">
+                    <label>标题</label>
+                    <div id="titleEditor" contenteditable="true" class="title-editor"></div>
+                </div>
+                <div class="content-editor-wrapper">
+                    <label>内容</label>
+                    <div id="editor" contenteditable="true" class="editor"></div>
+                </div>
+                <div class="button-group">
+                    <button id="copyBtn">剪切</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/logger.js"></script>
+    <script src="/script.js"></script>
+</body>
+</html> 
