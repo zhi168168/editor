@@ -132,6 +132,42 @@
             }
             console.log('8. 插入完成后编辑器的HTML:', document.getElementById('editor').innerHTML);
         });
+
+        function loadArticles() {
+            // 直接从服务器获取数据
+            fetch('/api/articles')
+                .then(response => response.json())
+                .then(data => {
+                    articles = data;
+                    renderArticles();
+                })
+                .catch(error => {
+                    console.error('获取文章失败:', error);
+                });
+        }
+
+        function saveArticles() {
+            // 保存到服务器
+            fetch('/api/articles', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(articles)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('文章保存成功');
+                }
+            })
+            .catch(error => {
+                console.error('保存文章失败:', error);
+            });
+
+            // 同时更新本地存储
+            localStorage.setItem('articles', JSON.stringify(articles));
+        }
     </script>
 </body>
 </html> 

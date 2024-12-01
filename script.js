@@ -247,9 +247,9 @@ function copyAndDelete() {
         articleElement.classList.add('removing');
         
         // 等待动画完成后移除文章
-        setTimeout(() => {
+        setTimeout(async () => {
             articles.splice(currentArticleIndex, 1);
-            saveArticles(); // 保存到服务器
+            await saveArticles();
             
             renderArticles();
             if (articles.length > 0) {
@@ -258,7 +258,7 @@ function copyAndDelete() {
                 currentArticleIndex = -1;
                 editorArea.style.display = 'none';
             }
-        }, 500); // 500ms 是动画持续时间
+        }, 500);
         
         restoreBtn.style.display = 'block';
     });
@@ -279,7 +279,7 @@ function restoreLastArticle() {
 }
 
 // 清空文章列表
-function clearArticles() {
+async function clearArticles() {
     if (!articles.length || !confirm('确定要清空所有文案吗？')) return;
     
     deletedArticles = [...articles, ...deletedArticles];
@@ -288,6 +288,11 @@ function clearArticles() {
     editor.innerHTML = '';
     titleEditor.innerHTML = '';
     editorArea.style.display = 'none';
+    
+    // 先保存到服务器，确保清空操作同步
+    await saveArticles();
+    
+    // 然后再更新界面
     renderArticles();
     restoreBtn.style.display = 'block';
 }
@@ -377,18 +382,28 @@ async function loadArticles() {
         renderArticles();
     } catch (err) {
         console.error('加载数据失败:', err);
+        // 如果服务器加载失败，尝试从本地存储加载
+        const savedArticles = localStorage.getItem('articles');
+        if (savedArticles) {
+            articles = JSON.parse(savedArticles);
+            renderArticles();
+        }
     }
 }
 
 async function saveArticles() {
     try {
-        await fetch('http://112.124.43.20:3000/api/articles', {
+        const response = await fetch('http://112.124.43.20:3000/api/articles', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(articles)
         });
+        const result = await response.json();
+        if (!result.success) {
+            console.error('保存失败:', result.error);
+        }
     } catch (err) {
         console.error('保存数据失败:', err);
     }

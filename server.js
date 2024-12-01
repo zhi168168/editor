@@ -7,6 +7,18 @@ const app = express();
 const PORT = 3000;
 const DATA_FILE = path.join(__dirname, 'data', 'articles.json');
 
+// 添加错误处理中间件
+app.use((err, req, res, next) => {
+    console.error('服务器错误:', err);
+    res.status(500).json({ error: '服务器内部错误' });
+});
+
+// 添加请求日志
+app.use((req, res, next) => {
+    console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+    next();
+});
+
 // 确保数据目录存在
 async function ensureDataDir() {
     try {
@@ -51,5 +63,8 @@ app.post('/api/articles', async (req, res) => {
 });
 
 app.listen(PORT, '0.0.0.0', () => {
+    console.log(`服务器启动时间: ${new Date().toISOString()}`);
     console.log(`服务器运行在 http://112.124.43.20:${PORT}`);
+}).on('error', (err) => {
+    console.error('服务器启动失败:', err);
 }); 
